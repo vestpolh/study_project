@@ -1,44 +1,42 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import './App.css';
+import FilmInfo from './film-info';
+
+const KEY_ESCAPE = 'Escape';
 
 function App() {
-  //const [term, setTerm] = useState('');
+  const [isVisibleFilmInfo, setVisibleFilmInfo] = useState(true);
 
-  const nameRef = useRef<HTMLInputElement | null>(null);
-  const emailRef = useRef<HTMLInputElement | null>(null);
+  useEffect(()=>{
+    document.addEventListener('keydown', onKeyDownEsc);
+    return () => {
+      document.removeEventListener('keydown', onKeyDownEsc);
+    };
+  }, [isVisibleFilmInfo])
 
-  useEffect(() => focusOnName, []);
+  const onKeyDownEsc = (evt: KeyboardEvent) => {
+    if (evt.key == KEY_ESCAPE) {
+      setVisibleFilmInfo(false);
+    }
+  }
 
-  // const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log(term);
-  // };
+  const clickHandle = () =>  {
+    setVisibleFilmInfo((prevState)=> !prevState);
+  }
 
-  const focusOnName = () =>  { nameRef.current?.focus() };
-  const focusOnEmail = () =>  { emailRef.current?.focus() };
+
 
   return (
+    
     <div className='container'>
-      {/* <form onSubmit={submitForm}>
-        <input 
-          value={term}
-          onChange={(e) => setTerm(e.target.value)}
-          type='text'
-          placeholder='Enter a term'
-          className='input'
-        />
-        <button className='btn'>Submit</button>
-      </form> */}
-      <h1>Example</h1>
-      <input ref={nameRef} type='text' className='input' placeholder='Name'/>
-      <input ref={emailRef} type='text' className='input' placeholder='Email'/>
-
-      <div className='btn-wrapper'>
-        <button onClick={focusOnName} className='btn'>Focus on Name</button>
-        <button onClick={focusOnEmail} className='btn'>Focus on Email</button>
-      </div>
-      
+      <button 
+        className='custom-button button-danger'
+        onClick={clickHandle}>
+          {isVisibleFilmInfo ? '- Скрыть' : '+ Показать'}
+      </button>
+      <p></p>
+      {isVisibleFilmInfo && <FilmInfo />}
     </div>
   );
 }
