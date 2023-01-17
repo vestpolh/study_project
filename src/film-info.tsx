@@ -1,23 +1,26 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import './App.css';
+const useFilm = (filmId: any) => {
+  const [film, setFilm] = useState({name: null});
+
+  useEffect(() => {
+    let isNeedUpdate = true;
+
+    fetch(`https://10.react.pages.academy/wtw/films/${filmId}`)
+      .then((response) => response.json())
+      .then((film) => isNeedUpdate && setFilm(film));
+    return () => {isNeedUpdate = false};
+
+  }, [filmId]);
+
+  return film;
+};
+
 
 
 function FilmInfo() {
   const [id, setId] = useState(1);
-  const [film, setFilm] = useState({name: null});
-  
-  useEffect(() => {
-    let isNeedUpdate = true;
-    console.log(`useEffect${id}`);
-
-    fetch(`https://10.react.pages.academy/wtw/films/${id}`)
-    .then((response) => response.json())
-    .then((film) => isNeedUpdate && setFilm(film));
-    return () => {isNeedUpdate = false};
-
-  }, [id]);
-
+  const film = useFilm(id);
 
   return (
     
