@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import './App.css';
+import './styles.css';
 import FilmInfo from './film-info';
 
 const KEY_ESCAPE = 'Escape';
